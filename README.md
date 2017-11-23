@@ -9,7 +9,7 @@ visibilidade garantida pelo algoritmo do “z-buffer”.
 Parte Específica: Produzir comparativo entre Gouraud e Phong com duas janelas para
 visualização simultânea.
 
-Descrição O usuário, através de arquivos-texto ou interface gráfica, entra com dados do
+Descrição: O usuário, através de arquivos-texto ou interface gráfica, entra com dados do
 objeto (triangulado, com lista dos vértices e da conectividade, que determina os triângulos,
 de um arquivo-texto), atributos do objeto (k a , k d e k s , pontos flutuantes entre 0 e 1, η, ponto
 flutuante positivo e O d , tripla de pontos flutuantes entre 0 e 1), atributos da cena (I a , I L ,
