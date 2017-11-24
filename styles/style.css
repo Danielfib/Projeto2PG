@@ -1,0 +1,17 @@
+body, html {
+    height: 100%;
+}
+
+#left {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+}
+
+.bg-darko {
+    background-color: #FEFEFE;
+}
+
+.righter{
+    background-color: #90A4AE;
+}
