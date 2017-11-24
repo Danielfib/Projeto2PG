@@ -1,60 +1,37 @@
-body, html {
+html {
+  width: 100%;
+}
+body {
+  background: #f5f5f5;
+  margin: 50px auto;
+  width: 512px;
+}
+
+.subtile{
+    font-size: 20px;
+    margin-right:20px;
+    font-weight: 600;
+}
+
+.mdl-button--file {
+  input {
+    cursor: pointer;
     height: 100%;
-}
-
-#left {
-    position: fixed;
+    right: 0;
+    opacity: 0;
+    position: absolute;
     top: 0;
-    bottom: 0;
-}
-
-.bg-darko {
-    background-color: #FEFEFE;
-}
-
-.righter{
-    background-color: #90A4AE;
-}
-
-.side-nav li>a {
-  padding: 0 16px;
-}
-
-.side-nav .divider {
-  margin:0;
-  height:8px;
-  border-bottom:1px solid #e0e0e0;
-  background-color: transparent;
-}
-
-
-.sidenav-header {
-background: url("../images/user-bg.jpg") no-repeat center center;
-background-size: cover;
-margin-bottom: 0px;
-padding: 15px 0 0 15px;
-  .row {
-    margin-bottom: 0;
+    width: 300px;
+    z-index: 4;
   }
 }
 
-.sidenav-footer {
-margin-bottom: 0px;
-padding: 0;
-  .row {
-    margin-bottom: 0;
-    .social-icons {
-      a {
-        opacity: 0.5;
-        padding: 0;
-        text-align:center;
-        &:hover {
-          background-color:inherit;
-          opacity: 1;
-        }
-      }
-    }
+.mdl-textfield--file {
+  .mdl-textfield__input {
+    box-sizing: border-box;
+    width: calc(100% - 32px);
+  }
+  .mdl-button--file {
+    right: 0;
   }
 }
-
-
