@@ -4,42 +4,56 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title >Gouraud X Phong </title>
         <link rel="stylesheet" href="styles/style.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
         
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons"     rel="stylesheet">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+
 
     </head>
   
     <body>
-<div class="container-fluid h-100">
-    <div class="row h-100">
-        <div class="col-sm-3 col-2 bg-darko text-white py-2 d-flex  justify-content-center" id="left">
-            <h3  style="color:#000; margin-top:15px" >Projeto de PG 2017.2</h3>
-            <h3  style="color:#000; margin-top:15px" >Projeto de PG 2017.2</h3>
-            
-        </div>
+    
+   
+      
+      <ul class="side-nav grey darken-2" id="mobile-demo">
         
         
-        <div  class="col righter offset-2 offset-sm-3 py-2">
-            <a>fuck</a>
-            <div id="main">
-                <canvas id="canvas"></canvas>
+        <li class="sidenav-header blue">
+          <div class="row">
+            <div class="col s8">
+                <a class="btn-flat dropdown-button waves-effect waves-light white-text" href="#" data-activates="profile-dropdown">Jay<i class="mdi-navigation-arrow-drop-down right"></i></a>
+                <ul id="slide-out" class="side-nav fixed">
+                  <li><a href="#!">First Sidebar Link</a></li>
+                  <li><a href="#!">Second Sidebar Link</a></li>
+                </ul>
+                <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+          
             </div>
+          </div>
+          </li>
+      </ul>
+      
+  
 
-        </div>
-    </div>
-</div>
 
-     <!--- jquery and materilize -->
-    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-    <script src="scripts/main.js"></script>
+   <script src="materialize/js/jquery-3.1.1.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+
+   <script>
+    // SIDEBAR
+    $(".button-collapse").sideNav();
+   </script>
+   
+   
+
+    
     
     <!--- PG scripts -->
 
-      </body>
+    </body>
 
 </html>
