@@ -50,7 +50,11 @@ Vector.prototype.produtoVetorial = function(v) {
 };
 
 Vector.prototype.gramSchmidt = function(v) {
-    return this.subtrair()
+    return v.subtrair(v.projecao(this));
+}
+
+Vector.prototype.getCosseno = function(v) {
+    return (this.produtoInterno(v) / (this.norma() * v.norma()));
 }
 
 //copia vetor
