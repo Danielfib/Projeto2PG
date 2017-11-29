@@ -13,7 +13,9 @@ function Camera (cameraPosition, vetorN, vetorV, d, hx, hy){
         this.vetorV = this.vetorV.gramSchmidt(this.vetorN);
         this.vetorN = this.vetorV.normaliza();
         var vetorU = this.vetorV.produtoVetorial(this.vetorN);
-
+        this.matrix.push([vetorU.x, vetorU.y, vetorU.z ]);
+        this.matrix.push([this.vetorV.x,this.vetorV.y,this.vetorV.z]);
+        this.matrix.push([this.vetorN.x,this.vetorN.y,this.vetorN.z]);
     }
     this.calibrarCamera();
 
