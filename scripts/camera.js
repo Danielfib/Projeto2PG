@@ -6,8 +6,8 @@ function Camera (cameraPosition, vetorN, vetorV, d, hx, hy){
     this.d = d;
     this.hx = hx;
     this.hy = hy;
-    
-    
+    this.matrix = [];
+
     //console.log(cameraPosition);
     //console.log(vetorN);
     //console.log(vetorV);
@@ -15,6 +15,17 @@ function Camera (cameraPosition, vetorN, vetorV, d, hx, hy){
     //console.log(hx);
     //console.log(hy);     
 }
+
+Camera.prototype.calibrarCamera = function(){
+    this.vetorN = this.vetorN.normaliza();
+    this.vetorV = this.vetorV.gramSchmidt(this.vetorN);
+    this.vetorN = this.vetorV.normaliza();
+    var vetorU = this.vetorV.produtoVetorial(this.vetorN);
+    this.matrix.push([vetorU.x, vetorU.y, vetorU.z ]);
+    this.matrix.push([this.vetorV.x,this.vetorV.y,this.vetorV.z]);
+    this.matrix.push([this.vetorN.x,this.vetorN.y,this.vetorN.z]);
+}
+this.calibrarCamera();
 
 var camera;
 
