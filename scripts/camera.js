@@ -7,6 +7,12 @@ function Camera (cameraPosition, vetorN, vetorV, d, hx, hy){
     this.hx = hx;
     this.hy = hy;
     
+    function calibrarCamera(){
+        this.vetorV = vetorV.gramSchmidt(vetorN);
+        this.vetorU = vetorV.produtoVetorial(vetorN);
+    }
+    
+    this.calibrarCamera();
     
     //console.log(cameraPosition);
     //console.log(vetorN);
