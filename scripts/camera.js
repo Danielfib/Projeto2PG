@@ -25,6 +25,7 @@ Camera.prototype.calibrarCamera = function(){
     this.matrix.push([this.vetorV.x,this.vetorV.y,this.vetorV.z]);
     this.matrix.push([this.vetorN.x,this.vetorN.y,this.vetorN.z]);
 }
+
 this.calibrarCamera();
 
 var camera;
