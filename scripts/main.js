@@ -1,17 +1,17 @@
 var canvas;
 
-var canvasHeight;
-var canvasWidth;
+const CANVAS_HEIGHT = 800;
+const CANVAS_WIDTH = 600;
 
 var context;
 
-function startCanvas(){
-    canvasWidth = document.getElementById('canvasDiv').offsetWidth;
-    canvasHeight = document.getElementById('canvasDiv').offsetHeight;
-    
+function startCanvas(){    
     canvas = document.getElementById('canvas');
     context = canvas.getContext('2d');
     
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
+    canvas.width = CANVAS_WIDTH;
+    canvas.height = CANVAS_HEIGHT;
 }
+
+//preenche o zbuffer com valores infinitos
+fillZBuffer();
