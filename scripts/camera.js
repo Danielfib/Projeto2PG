@@ -16,10 +16,10 @@ Camera.prototype.mudarSisCoordenadas = function(p) {
     var x = (this.matrix[0][0] * p.x) + (this.matrix[0][1] * p.y) + (matrix[0][2] * p.z);
     var y = (this.matrix[1][0] * p.x) + (this.matrix[1][1] * p.y) + (matrix[1][2] * p.z);
     var z = (this.matrix[2][0] * p.x) + (this.matrix[2][1] * p.y) + (matrix[2][2] * p.z);
-    var a = new Point3D(x, y, z);
+    var a = new Ponto3D(x, y, z);
     a.normal = p.normal;
     return a;
-}
+};
 
 Camera.prototype.calibrarCamera = function() {
     this.vetorN = this.vetorN.normaliza();
@@ -29,7 +29,7 @@ Camera.prototype.calibrarCamera = function() {
     this.matrix.push([vetorU.x, vetorU.y, vetorU.z]);
     this.matrix.push([this.vetorV.x, this.vetorV.y, this.vetorV.z]);
     this.matrix.push([this.vetorN.x, this.vetorN.y, this.vetorN.z]);
-}
+};
 
 this.calibrarCamera();
 

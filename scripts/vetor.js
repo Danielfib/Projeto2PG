@@ -8,16 +8,16 @@ function Vector(x, y, z) {
 //somar vetores
 Vector.prototype.somar = function(v) {
     return (new Vector(this.x + v.x, this.y + v.y, this.z + v.y));
-}
+};
 
 //subtrair vetores
 Vector.prototype.subtrair = function(v) {
     return (new Vector(this.x - v.x, this.y - v.y, this.z - v.y));
-}
+};
 
 Vector.prototype.multiplicarEscalar = function(k) {
     return (this.x*k, this.y*k, this.z*k);
-}
+};
 
 //produto interno
 Vector.prototype.produtoInterno = function(v) {
@@ -51,13 +51,13 @@ Vector.prototype.produtoVetorial = function(v) {
 
 Vector.prototype.gramSchmidt = function(v) {
     return v.subtrair(v.projecao(this));
-}
+};
 
 Vector.prototype.getCosseno = function(v) {
     return (this.produtoInterno(v) / (this.norma() * v.norma()));
-}
+};
 
 //copia vetor
 Vector.prototype.clone = function () {
     return new Vetor(this.x, this.y, this.z);
-  };
+};

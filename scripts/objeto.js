@@ -34,17 +34,17 @@ function loadObject(event){
                 var y = entrada[count++];
                 var z = entrada[count++];
                 
-                pontos.push(new Point3D(x, y, z));
+                pontos.push(new Ponto3D(x, y, z));
             }
             
             
             var pontosTriangulo = [];
             for(var c = 0; c < numTriangulos; c++){
-                var a = entrada[count++];
-                var b = entrada[count++];
-                var c = entrada[count++];
+                var X = entrada[count++];
+                var Y = entrada[count++];
+                var Z = entrada[count++];
                 
-                pontosTriangulo.push([a, b, c]);
+                pontosTriangulo.push([X, Y, Z]);
             }
             
             objeto = new Objeto(pontos, pontosTriangulo);        
