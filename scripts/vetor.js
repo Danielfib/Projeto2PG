@@ -27,7 +27,7 @@ Vector.prototype.produtoInterno = function(v) {
 //normalizacao
 Vector.prototype.normaliza = function() {
     var norma = this.norma();
-    return (new Vector(this.x/norma, this.y/nomra, this.z/norma));
+    return (new Vector(this.x/norma, this.y/norma, this.z/norma));
 };
 
 //norma

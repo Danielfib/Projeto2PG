@@ -6,6 +6,12 @@ function Ponto3D(x, y, z){
     this.normal = new Vector(0, 0, 0);
 }
 
+Ponto3D.prototype.transladar = function(a) {
+    var p = new Ponto3D(a.x - this.x, a.y - this.y, a.z - this.z);
+    p.normal = this.normal;
+    return p;
+}
+
 Ponto3D.prototype.sub = function(point){
     return new Vector( this.x - point.x, this.y - point.y, this.z - point.z);
 }
