@@ -1,33 +1,39 @@
-function Camera (cameraPosition, vetorN, vetorV, d, hx, hy){
-    //construtor
-    this.cameraPosition = cameraPosition;
+function Camera (pontoC, vetorN, vetorV, d, hx, hy) {
+    this.pontoC = pontoC;
     this.vetorN = vetorN;
     this.vetorV = vetorV;
     this.d = d;
     this.hx = hx;
     this.hy = hy;
     this.matrix = [];
-
-    //console.log(cameraPosition);
-    //console.log(vetorN);
-    //console.log(vetorV);
-    //console.log(d);
-    //console.log(hx);
-    //console.log(hy);     
 }
 
-Camera.prototype.calibrarCamera = function(){
+Camera.prototype.mudarSisCoordenadas = function(p) {
+    //translada o ponto em relação ao foco
+    p = p.transladar(this.pontoC);
+
+    //mudança de base
+    var x = (this.matrix[0][0] * p.x) + (this.matrix[0][1] * p.y) + (matrix[0][2] * p.z);
+    var y = (this.matrix[1][0] * p.x) + (this.matrix[1][1] * p.y) + (matrix[1][2] * p.z);
+    var z = (this.matrix[2][0] * p.x) + (this.matrix[2][1] * p.y) + (matrix[2][2] * p.z);
+    var a = new Point3D(x, y, z);
+    a.normal = p.normal;
+    return a;
+}
+
+Camera.prototype.calibrarCamera = function() {
     this.vetorN = this.vetorN.normaliza();
     this.vetorV = this.vetorV.gramSchmidt(this.vetorN);
     this.vetorN = this.vetorV.normaliza();
-    var vetorU = this.vetorV.produtoVetorial(this.vetorN);
-    this.matrix.push([vetorU.x, vetorU.y, vetorU.z ]);
-    this.matrix.push([this.vetorV.x,this.vetorV.y,this.vetorV.z]);
-    this.matrix.push([this.vetorN.x,this.vetorN.y,this.vetorN.z]);
+    var vetorU = this.vetorN.produtoVetorial(this.vetorv);
+    this.matrix.push([vetorU.x, vetorU.y, vetorU.z]);
+    this.matrix.push([this.vetorV.x, this.vetorV.y, this.vetorV.z]);
+    this.matrix.push([this.vetorN.x, this.vetorN.y, this.vetorN.z]);
 }
+
 this.calibrarCamera();
 
-var camera;
+var camera = null;
 
 document.getElementById('camera').addEventListener('change', loadCamera, false);
 
@@ -39,15 +45,12 @@ function loadCamera(event){
             var count = 0;
             var entrada = [];
             var dados = this.result.split('\n');
-            //console.log(dados);
-            for (var c = 0; c < dados.length; c++){
+            for (var c = 0; c < dados.length; c++) {
                 var valores = dados[c].split(' ');
-                for (var c1 = 0; c1 < valores.length; c1++){
+                for (var c1 = 0; c1 < valores.length; c1++) {
                     entrada.push(parseFloat(valores[c1]));
                 }
             }
-            //console.log(entrada);
-        
         
             //talvez aqui usar point3d e vector
             var cameraPosition = [entrada[count], entrada[count+1], entrada[count+2]];
@@ -65,5 +68,4 @@ function loadCamera(event){
         };        
     })(file);
     reader.readAsText(file);
-
 }
