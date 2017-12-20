@@ -2,9 +2,47 @@ function Objeto(pontos, pontosTriangulo){
     
     this.pontos = pontos;
     this.pontosTriangulos = pontosTriangulo;
-        
-    //calcular triangulos
+    this.triangulos = [];
 }
+
+Objeto.prototype.calcTriangulo = function () {
+    //pontos do objeto em coordenadas de vista
+    for(var i = 0; i < this.pontos.length; i++) {
+        this.pontos[i] = camera.mudarSisCoordenadas(this.pontos[i]);
+    }
+    var triangulo;
+    for(var i = 0; i < this.pontosTriangulos.length; i++) {
+        
+        //vertices do triangulo
+        var a = this.pontosTriangulos[i][0] - 1;
+        var b = this.pontosTriangulos[i][1] - 1;
+        var c = this.pontosTriangulos[i][2] - 1;
+
+        var verticeA = this.pontos[a];
+        var verticeB = this.pontos[b];
+        var verticeC = this.pontos[c];
+
+        //criando o triangulo
+        triangulo = new Triangulo(verticeA, verticeB, verticeC);
+
+        //calculo das normais dos triangulos
+        triangulo.calcNormal();
+        
+        //calculo das normais dos vertices
+        this.pontos[a].normal = this.normal[a].normal.add(triangulo.normal);
+        this.pontos[b].normal = this.normal[b].normal.add(triangulo.normal);
+        this.pontos[c].normal = this.normal[c].normal.add(triangulo.normal);
+
+        //normalização das normais
+        for(var i = 0; i < this.pontos.length; i++) {
+            this.pontos[i].normal = this.pontos[i].normal.normaliza();
+        }
+
+        this.triangulos.push(triangulo);
+    }
+}
+
+this.calcTriangulo();
 
 document.getElementById('objeto').addEventListener('change', loadObject, false);
 
