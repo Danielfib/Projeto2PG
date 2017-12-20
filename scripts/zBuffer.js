@@ -7,7 +7,7 @@ function fillZBuffer(){
     for (var c = 0; c < 800; c++){
         zbuffer.push([]);
         for (var c1 = 0; c1 < 600; c1++){
-            zbuffer[zbuffer.length-1].push(+Infinity);
+            zbuffer[zbuffer.length-1].push(new tuplaZBuffer([0,0,0], +Infinity));
         }
     }
 }
