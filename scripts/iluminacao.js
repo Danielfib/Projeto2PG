@@ -1,5 +1,5 @@
 function Iluminacao(pl, ka, ia, kd, od, ks, il, n){
-    //construtor:
+    
     this.pl = pl;
     this.ka = ka;
     this.ia = ia;
