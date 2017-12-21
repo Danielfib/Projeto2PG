@@ -6,32 +6,32 @@ function Camera (pontoC, vetorN, vetorV, d, hx, hy) {
     this.hx = hx;
     this.hy = hy;
     this.matrix = [];
+
+    this.mudarSisCoordenadas = function(ponto) {
+        //translada o ponto em relação ao foco
+        var p = ponto.transladar(this.pontoC);
+
+        //mudança de base
+        var x = (this.matrix[0][0] * p.x) + (this.matrix[0][1] * p.y) + (this.matrix[0][2] * p.z);
+        var y = (this.matrix[1][0] * p.x) + (this.matrix[1][1] * p.y) + (this.matrix[1][2] * p.z);
+        var z = (this.matrix[2][0] * p.x) + (this.matrix[2][1] * p.y) + (this.matrix[2][2] * p.z);
+        var a = new Ponto3D(x, y, z);
+        a.normal = p.normal;
+        return a;
+    };
+
+    this.calibrarCamera = function() {
+        this.vetorN = this.vetorN.normaliza();
+        this.vetorV = this.vetorV.gramSchmidt(this.vetorN);
+        this.vetorN = this.vetorV.normaliza();
+        var vetorU = this.vetorN.produtoVetorial(this.vetorV);
+        this.matrix.push([vetorU.x, vetorU.y, vetorU.z]);
+        this.matrix.push([this.vetorV.x, this.vetorV.y, this.vetorV.z]);
+        this.matrix.push([this.vetorN.x, this.vetorN.y, this.vetorN.z]);
+    };
+    
+    this.calibrarCamera();
 }
-
-Camera.prototype.mudarSisCoordenadas = function(p) {
-    //translada o ponto em relação ao foco
-    p = p.transladar(this.pontoC);
-
-    //mudança de base
-    var x = (this.matrix[0][0] * p.x) + (this.matrix[0][1] * p.y) + (matrix[0][2] * p.z);
-    var y = (this.matrix[1][0] * p.x) + (this.matrix[1][1] * p.y) + (matrix[1][2] * p.z);
-    var z = (this.matrix[2][0] * p.x) + (this.matrix[2][1] * p.y) + (matrix[2][2] * p.z);
-    var a = new Point3D(x, y, z);
-    a.normal = p.normal;
-    return a;
-}
-
-Camera.prototype.calibrarCamera = function() {
-    this.vetorN = this.vetorN.normaliza();
-    this.vetorV = this.vetorV.gramSchmidt(this.vetorN);
-    this.vetorN = this.vetorV.normaliza();
-    var vetorU = this.vetorN.produtoVetorial(this.vetorv);
-    this.matrix.push([vetorU.x, vetorU.y, vetorU.z]);
-    this.matrix.push([this.vetorV.x, this.vetorV.y, this.vetorV.z]);
-    this.matrix.push([this.vetorN.x, this.vetorN.y, this.vetorN.z]);
-}
-
-this.calibrarCamera();
 
 var camera = null;
 
@@ -51,20 +51,18 @@ function loadCamera(event){
                     entrada.push(parseFloat(valores[c1]));
                 }
             }
-        
-            //talvez aqui usar point3d e vector
-            var cameraPosition = [entrada[count], entrada[count+1], entrada[count+2]];
+
+            var cameraPosition = new Ponto3D(entrada[count], entrada[count+1], entrada[count+2]);
             count += 3;
-            var vetorN = [entrada[count], entrada[count+1], entrada[count+2]];
+            var vetorN = new Vector(entrada[count], entrada[count+1], entrada[count+2]);
             count += 3;
-            var vetorV = [entrada[count], entrada[count+1], entrada[count+2]];
+            var vetorV = new Vector(entrada[count], entrada[count+1], entrada[count+2]);
             count += 3;
             var d = entrada[count];
             var hx = entrada[count+1];
             var hy = entrada[count+2];
             
-            camera = new Camera(cameraPosition, vetorN,
-                                vetorV, d, hx, hy);
+            camera = new Camera(cameraPosition, vetorN, vetorV, d, hx, hy);
         };        
     })(file);
     reader.readAsText(file);

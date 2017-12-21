@@ -45,8 +45,9 @@ Vector.prototype.projecao = function(v) {
 Vector.prototype.produtoVetorial = function(v) {
     var X = this.y*v.z - this.z*v.y;
 	var Y = this.z*v.x - this.x*v.z;
-	var Z = this.x*v.y - this.y*v.x; 
-	return (new Vector(X, Y, Z));
+    var Z = this.x*v.y - this.y*v.x;
+    var w = new Vector(X, Y, Z);
+	return w;
 };
 
 Vector.prototype.gramSchmidt = function(v) {
