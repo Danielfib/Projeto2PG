@@ -1,19 +1,54 @@
-function Objeto(pontos, pontosTriangulo){
-    //construtor
+function Objeto(pontos, pontosTriangulos) {
+    
     this.pontos = pontos;
-    this.pontosTriangulos = pontosTriangulo;
-    //console.log("pontos:");
-    //console.log(pontos);
-    //console.log("pontosTriangulo:");
-    //console.log(pontosTriangulo);
+    this.pontosTriangulos = pontosTriangulos;
+    this.triangulos = [];
+
+    this.calcTriangulo = function () {
+        var triangulo;
+
+        //pontos do objeto em coordenadas de vista
+        for(var i = 0; i < this.pontos.length; i++) {
+            this.pontos[i] = camera.mudarSisCoordenadas(this.pontos[i]);
+        }
+
+        for(var i = 0; i < this.pontosTriangulos.length; i++) {
+            
+            //vertices do triangulo
+            var a = this.pontosTriangulos[i][0] - 1;
+            var b = this.pontosTriangulos[i][1] - 1;
+            var c = this.pontosTriangulos[i][2] - 1;
+
+            var verticeA = this.pontos[a];
+            var verticeB = this.pontos[b];
+            var verticeC = this.pontos[c];
+
+            //criando o triangulo
+            triangulo = new Triangulo(verticeA, verticeB, verticeC);
+
+            //calculo das normais dos triangulos
+            triangulo.calcNormal();
+            
+            //calculo das normais dos vertices
+            this.pontos[a].normal = this.pontos[a].normal.somar(triangulo.normal);
+            this.pontos[b].normal = this.pontos[b].normal.somar(triangulo.normal);
+            this.pontos[c].normal = this.pontos[c].normal.somar(triangulo.normal);
+
+            //normalização das normais
+            for(var i = 0; i < this.pontos.length; i++) {
+                this.pontos[i].normal = this.pontos[i].normal.normaliza();
+            }
+
+            this.triangulos.push(triangulo);
+        }
+    };
     
-    
-    //calcular triangulos
+    this.calcTriangulo();
 }
 
 document.getElementById('objeto').addEventListener('change', loadObject, false);
 
-var objeto;
+var objeto = null;
 
 function loadObject(event){
     var file = event.target.files[0]; //so vai selecionar um arquivo
@@ -23,39 +58,36 @@ function loadObject(event){
             var count = 0;
             var entrada = [];
             var dados = this.result.split('\n');
-            //console.log(dados);
             for (var c = 0; c < dados.length; c++){
                 var valores = dados[c].split(' ');
                 for (var c1 = 0; c1 < valores.length; c1++){
                     entrada.push(parseFloat(valores[c1]));
                 }
             }
-            //console.log(entrada);
             
             var numPontos = entrada[count++];
             var numTriangulos = entrada[count++];
             
             var pontos = [];
-            for(var c = 0; c < numPontos; c++){
+            for(var c = 0; c < numPontos; c++) {
                 var x = entrada[count++];
                 var y = entrada[count++];
                 var z = entrada[count++];
                 
-                //usar ponto3d(n to conseguindo)
-                pontos.push([x, y, z]);
+                pontos.push(new Ponto3D(x, y, z));
             }
             
             
-            var pontosTriangulo = [];
+            var pontosTriangulos = [];
             for(var c = 0; c < numTriangulos; c++){
-                var X = entrada[count++];
-                var Y = entrada[count++];
-                var Z = entrada[count++];
+                var a = entrada[count++];
+                var b = entrada[count++];
+                var c = entrada[count++];
                 
-                pontosTriangulo.push([X, Y, Z]);
+                pontosTriangulos.push([a, b, c]);
             }
             
-            objeto = new Objeto(pontos, pontosTriangulo);        
+            objeto = new Objeto(pontos, pontosTriangulos);        
         };        
     })(file);
     reader.readAsText(file);
