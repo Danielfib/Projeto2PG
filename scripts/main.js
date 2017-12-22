@@ -95,6 +95,7 @@ function loadCamera(event){
 //-------------------------------OBJETO---------------------------------
 var objeto = null;
 //objeto tera como atributos os dois arraye de baixo
+var pontosOriginais = [];
 var pontos = [];
 var pontosTriangulo = [];
 var triangulos = []; //array de objetos triangulos
@@ -166,6 +167,8 @@ function loadObject(event){
                 var z = entrada[count++];
                 
                 pontos.push(new Ponto3D(x, y, z));
+                pontosOriginais.push(new Ponto3D(x, y, z));
+
             }
             
             
@@ -335,24 +338,24 @@ Ponto3D.prototype.clone = function() {
     return new Ponto3D(this.x, this.y, this.z);
 };
 
-Ponto3D.prototype.transfCoordenadasTela= function() {
+function transfCoordenadasTela(ponto) {
     // a linha abaixo gera os pontos 2D parametrizados no intervalo [-1, 1]:
     var dhx = camera.d / camera.hx;
     var dhy = camera.d / camera.hy;
-    var novoX = dhx * ( this.x / this.z );
-    var novoY = dhy * ( this.y / this.z );
+    var novoX = dhx * ( ponto.x / ponto.z );
+    var novoY = dhy * ( ponto.y / ponto.z );
     // em seguida parametrizamos os pontos para as dimensões da janela (intervalos [0, width] e [0, height]) ,
     // transformando tudo em inteiro, podendo descartar os pontos gerados no intervalo [-1, 1].
     novoX = parseInt((novoX+1) * (canvas.width/2) );
     novoY = parseInt((1-novoY)* (canvas.height/2) );
     return new Point2D(novoX,novoY);
-};
+}
 
-Ponto3D.prototype.convertendoTodosPonto = function() {
-    for( var i = 0 ; i < pontos.lenght ; i++) {
-        pontosTela[i] = pontos[i].transfCoordenadasTela;
+function convertendoTodosPonto(){
+    for(var i = 0 ; i < pontos.length ; i++) {
+        pontosTela[i] = transfCoordenadasTela(pontos[i]);
     }
-};
+}
 
 //-----------------------------------------------------------------------
 //---------------------------------PONTO2D-------------------------------
@@ -385,7 +388,6 @@ Triangulo.prototype.calcNormal = function() {
     var w = v.produtoVetorial(u);
     this.normal = w;
     this.normal.normaliza();
-    console.log("oi");
 };
 
 Triangulo.prototype.clone = function() {
@@ -407,29 +409,151 @@ function Triangulo2D(a, b, c) {
 Triangulo.prototype.clone = function() {
     return new Triangulo2D(this.a, this.b, this.c);
 };
+
+var triangulos2d = [];
+function converterTriangulos(){
+    for(var i = 0; i < triangulos.length; i++){
+        var v1_2d = transfCoordenadasTela(triangulos[i].a);
+        var v2_2d = transfCoordenadasTela(triangulos[i].b);
+        var v3_2d = transfCoordenadasTela(triangulos[i].c);
+        
+        var novoTri2d = new Triangulo2D(v1_2d, v2_2d, v3_2d);
+        triangulos2d.push(novoTri2d);
+    }
+}
 //-----------------------------------------------------------------------
-//---------------------------------ZBUFFER-------------------------------
+//---------------------------------ZBUFFER E OUTRAS COISAS-------------------------------
 //zbuffer é um array bidimensional
 var zbuffer;
-fillZBuffer();
 //preencher zbuffer de valores infinitos
 function fillZBuffer(){
     zbuffer = [];
-    for (var c = 0; c < 800; c++){
+    for (var c = 0; c < CANVAS_HEIGHT; c++){
         zbuffer.push([]);
-        for (var c1 = 0; c1 < 600; c1++){
+        for (var c1 = 0; c1 < CANVAS_WIDTH; c1++){
             zbuffer[zbuffer.length-1].push({cor:new Vector(0,0,0), dist:+Infinity});
         }
     }
 }
+
+//var pixel = {x: a, y: b};
+function calcCoordBaricentricas(i, pixel){
+    //i sendo o triangulo que queremos
+    var alfa, beta, gama;
+    var v1 = triangulos2d[i].a;
+    var v2 = triangulos2d[i].b;
+    var v3 = triangulos2d[i].c;
+    
+    alfa = (((v2.y - v3.y) * (pixel.x - v3.x)) + ((v3.x - v2.x) * (pixel.y - v3.y)))  /  
+           (((v2.y - v3.y) * (v1.x - v3.x)) + ((v3.x - v2.x) * (v1.y - v3.y)));
+    
+    beta = (((v3.y - v1.y) * (pixel.x - v3.x)) + ((v1.x - v3.x) * (pixel.y - v3.y)))  /
+           (((v2.y - v3.y) * (v1.x - v3.x)) + ((v3.x - v2.x) * (v1.y - v3.y)));
+    
+    gama = 1 - alfa - beta;
+    
+    //ponto 3d P, feito a partir da soma baricentrica:
+    var P = new Ponto3D(triangulos[i].a.x*alfa + triangulos[i].b.x*beta + triangulos[i].c.x*gama,
+                        triangulos[i].a.y*alfa + triangulos[i].b.y*beta + triangulos[i].c.y*gama,
+                        triangulos[i].a.z*alfa + triangulos[i].b.z*beta + triangulos[i].c.z*gama);
+    
+    
+    //usa phong se o z for menor que o do zbuffer:
+    //falta saber as posicoes, e n 0 0
+    if (P.z < zbuffer[0][0]){
+        zbuffer[0][0] = P.z;
+        calculoPhong(P,i,alfa,beta,gama);
+    }
+}
+var pontosNormais = [];
+
+function normalizarPontos(){
+    preencherNormaisVazio();
+    preencherNormais();   
+}
+
+function preencherNormaisVazio() {
+    for ( var i =0 ; i<pontos.length ; i++){
+        pontosNormais[i]= new Ponto3D(0,0,0);
+    }
+}
+
+function preencherNormais() {
+    for ( var i =0 ; i<pontos.length ; i++){
+        var x = pontos[triangulos[i].x];
+        console.log(x);
+        var y = pontos[triangulos[i].y];
+        var z = pontos[triangulos[i].z];
+        var vertice1 = x.sub(y);
+        var vertice2 = x.sub(z);
+
+        var normals = vertice1.produtoVetorial(vertice2).normaliza();
+            if (normals.z < 0) {
+              normals = normals.multiplicarEscalar(-1);
+            }
+
+        pontosNormais[triangulos[i].x] = pontosNormais[triangulos[i].x].somar(normals);
+        pontosNormais[triangulos[i].y] = pontosNormais[triangulos[i].y].somar(normals);
+        pontosNormais[triangulos[i].z] = pontosNormais[triangulos[i].z].somar(normals);
+    }
+}
+function calculoPhong(vetorP,i,alfa,beta,gama){ //sera que o p já vai vir? melhor não!   
+    var especular, difusa, ambiente;
+    var vetorN = calculoN(i,alfa,beta,gama); //falta esse calculo
+    var vetorL = vetorP.subtrair(pl);
+    var vetorR = 2*vetorN.produtoInterno(vetorL)*vetorN.subtrair(vetorL);
+    vetorN.normaliza();
+    vetorL.normaliza();
+    vetorR.normaliza();
+    
+    var rv = Math.pow(vetorR.produtoInterno(vetorV),n);
+    var nl = vetorL.produtoInterno(vetorN);
+    
+    ambiente = il.multiplicarEscalar(ka);
+    difusa = il.produtoInterno(od).multiplicarEscalar(nl * kd);
+    especular = il.multiplicarEscalar(ks*rv);
+    
+    if (vetorV.produtoInterno(vetorN)<0){
+        vetorN = vetorN.multiplicarEscalar(-1);
+    }
+    if (vetorL.produtoInterno(vetorN)<0){
+        difusa = new Vector(0,0,0);
+        especular = new Vector(0,0,0);
+    }
+    if (vetorR.produtoInterno(vetorV)<0){
+        especular = new Vector(0,0,0);
+    }
+    var cores = new Vector(0,0,0);
+    cores = ambiente.somar(difusa).somar(especular);
+    cores.x = Math.floor(Math.min(cores.x, 255));
+    cores.y = Math.floor(Math.min(cores.y, 255));
+    cores.z = Math.floor(Math.min(cores.z, 255));
+    
+    return cores;
+}
+
+function calculoN(i,alfa,beta,gama){
+    
+    var n = new Vector(0,0,0);
+    
+    n.x = pontosNormais[i].x.multiplicarEscalar(alfa) + pontosNormais[i].x.multiplicarEscalar(beta) + pontosNormais[i].x.multiplicarEscalar(gama);
+    n.y = pontosNormais[i].y.multiplicarEscalar(alfa) + pontosNormais[i].y.multiplicarEscalar(beta) + pontosNormais[i].y.multiplicarEscalar(gama);
+    n.z = pontosNormais[i].z.multiplicarEscalar(alfa) + beta*pontosNormais[i].z + pontosNormais[i].z.multiplicarEscalar(gama);
+    return n;
+}
+
 //-----------------------------------------------------------------------
 function enviar(){
+    fillZBuffer();
     startCanvas();
     //o que mais falta?
     //console.log("1didb1yidb1");
     calibrarCamera();
     //console.log("aqui");
     calcTriangulo();
-    //console.log("aqui2");
-    
+    console.log("aqui2");
+    convertendoTodosPonto();
+    converterTriangulos();
+    normalizarPontos();
+    console.log("aqui3",pontosNormais);
 }
