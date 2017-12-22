@@ -24,7 +24,7 @@
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
 
         <div class="mdl-layout__drawer">
-            <span  class="mdl-layout-title">Gourand x Phong</span>
+            <span  class="mdl-layout-title">Gourand x Phong (Phong)</span>
             <hr>
             <h5 style="margin-left:10px;font-size: 20px;" class="center" >Projeto de PG 2</h5>
             <div class="center" style="margin-left:10px;">
@@ -51,15 +51,21 @@
         
         <main class="mdl-layout__content">
             <div id="canvasDiv" class="page-content">
-                <a>hello dany 8D</a>
+               
                 <canvas style="background-color: aqua" id="canvas"></canvas>
             </div>
+            <a href="javascript:openGouraud('gourard.html')">bora pra gourard</a>
         </main>
     </div>
  
 
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <script src="scripts/main.js"></script>
+        <script>
+            function openGouraud() {
+                window.open("gourard.html", "janela1", "width = 800, height = 600")
+            }
+        </script>
 
 
     
