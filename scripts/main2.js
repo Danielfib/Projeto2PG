@@ -1,3 +1,6 @@
+// este é o main que possui o gouraud shading, aberto por uma aba externa apos o clique, basicamente somente se altera o esquema de iluminação.
+
+
 //----------------------------------------------------------------------
 //------------------------------CANVAS----------------------------------
 var canvas;
