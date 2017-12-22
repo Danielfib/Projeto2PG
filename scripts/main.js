@@ -95,20 +95,26 @@ function loadCamera(event){
 //-------------------------------OBJETO---------------------------------
 var objeto = null;
 //objeto tera como atributos os dois arraye de baixo
+<<<<<<< HEAD
 var pontosOriginais = [];
 var pontos = [];
+=======
+var pontosVista = [];
+var pontoOriginais = [];
+
+>>>>>>> 9646d6f5d7b1213eb37f19ca8572c9b4cceba22d
 var pontosTriangulo = [];
 var triangulos = []; //array de objetos triangulos
 
 function calcTriangulo() {
     var triangulo;
 
-    //pontos do objeto em coordenadas de vista
-    console.log("antes" , pontos[2]);
-    for(var i = 0; i < pontos.length; i++) {
-        pontos[i] = mudarSisCoordenadas(pontos[i]);
+    //pontosVista do objeto em coordenadas de vista
+    console.log("antes" , pontosVista[2]);
+    for(var i = 0; i < pontosVista.length; i++) {
+        pontosVista[i] = mudarSisCoordenadas(pontosVista[i]);
     }
-    console.log("depois",pontos[2]);
+    console.log("depois",pontosVista[2]);
 
     for(var i2 = 0; i2 < pontosTriangulo.length; i2++) {
 
@@ -117,9 +123,9 @@ function calcTriangulo() {
         var b = pontosTriangulo[i2][1] - 1;
         var c = pontosTriangulo[i2][2] - 1;
 
-        var verticeA = pontos[a];
-        var verticeB = pontos[b];
-        var verticeC = pontos[c];
+        var verticeA = pontosVista[a];
+        var verticeB = pontosVista[b];
+        var verticeC = pontosVista[c];
 
         //criando o triangulo
         triangulo = new Triangulo(verticeA, verticeB, verticeC);
@@ -128,13 +134,13 @@ function calcTriangulo() {
         triangulo.calcNormal();
 
         //calculo das normais dos vertices
-        pontos[a].normal = pontos[a].normal.somar(triangulo.normal);
-        pontos[b].normal = pontos[b].normal.somar(triangulo.normal);
-        pontos[c].normal = pontos[c].normal.somar(triangulo.normal);
+        pontosVista[a].normal = pontosVista[a].normal.somar(triangulo.normal);
+        pontosVista[b].normal = pontosVista[b].normal.somar(triangulo.normal);
+        pontosVista[c].normal = pontosVista[c].normal.somar(triangulo.normal);
 
         //normalização das normais
-        for(var i3 = 0; i3 < this.pontos.length; i3++) {
-            this.pontos[i3].normal = this.pontos[i3].normal.normaliza();
+        for(var i3 = 0; i3 < this.pontosVista.length; i3++) {
+            this.pontosVista[i3].normal = this.pontosVista[i3].normal.normaliza();
         }
 
         triangulos.push(triangulo);
@@ -166,9 +172,14 @@ function loadObject(event){
                 var y = entrada[count++];
                 var z = entrada[count++];
                 
+<<<<<<< HEAD
                 pontos.push(new Ponto3D(x, y, z));
                 pontosOriginais.push(new Ponto3D(x, y, z));
 
+=======
+                pontosVista.push(new Ponto3D(x, y, z));
+                pontoOriginais.push(new Ponto3D(x, y, z));
+>>>>>>> 9646d6f5d7b1213eb37f19ca8572c9b4cceba22d
             }
             
             
@@ -182,7 +193,7 @@ function loadObject(event){
             }
             //calcula as normais dos vertices, amarzenando-as num array de vetores
             //calcularNormaisPontos(pontosTriangulo);
-            objeto = {pontos: pontos, pontosTriangulo: pontosTriangulo};
+            objeto = {pontosVista: pontosVista, pontosTriangulo: pontosTriangulo};
         };        
     })(file);
     reader.readAsText(file);
@@ -190,14 +201,26 @@ function loadObject(event){
 //----------------------------------------------------------------------
 //----------------------------------ILUMINACAO--------------------------
 var iluminacao = null;
-var pl;
-var ka;
-var ia;
-var kd;
-var od;
-var ks;
-var il;
-var n;
+//-- LUZ
+var pl; //luz em coordenadas de mundo
+
+//-- AMBIENT
+var ka; //reflexao ambiental
+var ia; //RGB no ambient
+
+//-- DIFUSE
+var kd; //Const Difuse 
+var od; //RGB difuso
+
+//-- SPECULAR
+var ks; //Const Especular
+var n; //Rugosidade
+var il; //RGB FONTE LUZ
+
+
+function phong(){
+    
+}
 
 document.getElementById('iluminacao').addEventListener('change', loadIluminacao, false);
 
@@ -235,6 +258,8 @@ function loadIluminacao(event){
     reader.readAsText(file);
 
 }
+
+
 //-----------------------------------------------------------------------
 //------------------------------------VETORES----------------------------
 function Vector(x, y, z) {   
@@ -338,6 +363,7 @@ Ponto3D.prototype.clone = function() {
     return new Ponto3D(this.x, this.y, this.z);
 };
 
+<<<<<<< HEAD
 function transfCoordenadasTela(ponto) {
     // a linha abaixo gera os pontos 2D parametrizados no intervalo [-1, 1]:
     var dhx = camera.d / camera.hx;
@@ -346,14 +372,30 @@ function transfCoordenadasTela(ponto) {
     var novoY = dhy * ( ponto.y / ponto.z );
     // em seguida parametrizamos os pontos para as dimensões da janela (intervalos [0, width] e [0, height]) ,
     // transformando tudo em inteiro, podendo descartar os pontos gerados no intervalo [-1, 1].
+=======
+Ponto3D.prototype.transfCoordenadasTela= function() {
+    // a linha abaixo gera os pontosVista 2D parametrizados no intervalo [-1, 1]:
+    var dhx = camera.d / camera.hx;
+    var dhy = camera.d / camera.hy;
+    var novoX = dhx * ( this.x / this.z );
+    var novoY = dhy * ( this.y / this.z );
+    // em seguida parametrizamos os pontosVista para as dimensões da janela (intervalos [0, width] e [0, height]) ,
+    // transformando tudo em inteiro, podendo descartar os pontosVista gerados no intervalo [-1, 1].
+>>>>>>> 9646d6f5d7b1213eb37f19ca8572c9b4cceba22d
     novoX = parseInt((novoX+1) * (canvas.width/2) );
     novoY = parseInt((1-novoY)* (canvas.height/2) );
     return new Point2D(novoX,novoY);
 }
 
+<<<<<<< HEAD
 function convertendoTodosPonto(){
     for(var i = 0 ; i < pontos.length ; i++) {
         pontosTela[i] = transfCoordenadasTela(pontos[i]);
+=======
+Ponto3D.prototype.convertendoTodosPonto = function() {
+    for( var i = 0 ; i < pontosVista.lenght ; i++) {
+        pontosTela[i] = pontosVista[i].transfCoordenadasTela;
+>>>>>>> 9646d6f5d7b1213eb37f19ca8572c9b4cceba22d
     }
 }
 
@@ -376,9 +418,9 @@ function Triangulo(a, b, c){
 
 //calcular normal do triangulo normalizado
 
-//coordenadas baricentricas dos pontos do triangulo em relação a um ponto
+//coordenadas baricentricas dos pontosVista do triangulo em relação a um ponto
 
-//ordenar um trinagulo com os pontos ordenados
+//ordenar um trinagulo com os pontosVista ordenados
 
 //calcular area do triangulo
 
@@ -404,7 +446,7 @@ function Triangulo2D(a, b, c) {
 
 //coordenadas baricentricas
 
-//ordenar pontos do triangulo
+//ordenar pontosVista do triangulo
 
 Triangulo.prototype.clone = function() {
     return new Triangulo2D(this.a, this.b, this.c);
