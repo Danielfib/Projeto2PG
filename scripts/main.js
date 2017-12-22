@@ -422,7 +422,7 @@ function converterTriangulos(){
     }
 }
 //-----------------------------------------------------------------------
-//---------------------------------ZBUFFER E OUTRAS COISAS-------------------------------
+//---------------------------------ZBUFFER E PHONG------------------------------
 //zbuffer é um array bidimensional
 var zbuffer;
 //preencher zbuffer de valores infinitos
@@ -465,6 +465,8 @@ function calcCoordBaricentricas(i, pixel){
         calculoPhong(P,i,alfa,beta,gama);
     }
 }
+
+//TRABALHANDO COM NORMAIS ANTES DE INICIALIZAR O PHONG
 var pontosNormais = [];
 
 function normalizarPontos(){
@@ -497,9 +499,11 @@ function preencherNormais() {
         pontosNormais[triangulos[i].z] = pontosNormais[triangulos[i].z].somar(normals);
     }
 }
-function calculoPhong(vetorP,i,alfa,beta,gama){ //sera que o p já vai vir? melhor não!   
+
+//APOS O PREENCHIMENTO DAS NORMAIS, VAMOS GERAR O PHONG
+function calculoPhong(vetorP,i,alfa,beta,gama){   
     var especular, difusa, ambiente;
-    var vetorN = calculoN(i,alfa,beta,gama); //falta esse calculo
+    var vetorN = calculoN(i,alfa,beta,gama); //Calculo complexo presente logo  abaixo
     var vetorL = vetorP.subtrair(pl);
     var vetorR = 2*vetorN.produtoInterno(vetorL)*vetorN.subtrair(vetorL);
     vetorN.normaliza();
@@ -532,7 +536,7 @@ function calculoPhong(vetorP,i,alfa,beta,gama){ //sera que o p já vai vir? melh
     return cores;
 }
 
-function calculoN(i,alfa,beta,gama){
+function calculoN(i,alfa,beta,gama){  //este é o calculo do N, isto é de suma importância para desenvolver o vetor. Foi por essa razão a construcao dos pontosNormais
     
     var n = new Vector(0,0,0);
     
