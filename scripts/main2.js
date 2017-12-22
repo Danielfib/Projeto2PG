@@ -451,22 +451,21 @@ function calcCoordBaricentricas(i, pixel){
            (((v2.y - v3.y) * (v1.x - v3.x)) + ((v3.x - v2.x) * (v1.y - v3.y)));
     
     gama = 1 - alfa - beta;
-    
-    //ponto 3d P, feito a partir da soma baricentrica:
-    var P = new Ponto3D(triangulos[i].a.x*alfa + triangulos[i].b.x*beta + triangulos[i].c.x*gama,
-                        triangulos[i].a.y*alfa + triangulos[i].b.y*beta + triangulos[i].c.y*gama,
-                        triangulos[i].a.z*alfa + triangulos[i].b.z*beta + triangulos[i].c.z*gama);
-    
+    var cor = new Vector(0,0,0);
     
     //usa phong se o z for menor que o do zbuffer:
     //falta saber as posicoes, e n 0 0
     if (P.z < zbuffer[0][0]){
         zbuffer[0][0] = P.z;
-        calculoPhong(P,i,alfa,beta,gama);
+        gouraud(P,i,alfa,beta,gama);
     }
 }
 var pontosNormais = [];
 
+
+function gouraud(){
+    
+}
 function normalizarPontos(){
     preencherNormaisVazio();
     preencherNormais();   
