@@ -335,7 +335,7 @@ Ponto3D.prototype.clone = function() {
     return new Ponto3D(this.x, this.y, this.z);
 };
 
-Ponto3D.prototype.transfCoordenadasTela= function() {
+Ponto3D.prototype.transfCoordenadasTela = function() {
     // a linha abaixo gera os pontos 2D parametrizados no intervalo [-1, 1]:
     var dhx = camera.d / camera.hx;
     var dhy = camera.d / camera.hy;
@@ -431,5 +431,14 @@ function enviar(){
     //console.log("aqui");
     calcTriangulo();
     //console.log("aqui2");
+    
+    
+    var pontoTeste = new Ponto3D(5, 10, 20);
+    console.log(pontoTeste);
+    
+    pontoTeste = pontoTeste.transfCoordenadasTela();
+    console.log(pontoTeste);
+    
+    
     
 }
